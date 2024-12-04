@@ -1,12 +1,10 @@
 package ir.net_box.test.data
 
-import android.content.Context
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
-import dagger.hilt.android.qualifiers.ApplicationContext
 import ir.net_box.test.data.local.db.PlaylistDao
 import ir.net_box.test.data.remote.ApiService
 import ir.net_box.test.domin.NetboxRepository
