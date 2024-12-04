@@ -11,7 +11,7 @@ import ir.net_box.test.data.local.db.entity.PlaylistEntity
 interface PlaylistDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(data: List<PlaylistEntity>)
+    suspend fun insertAll(data: PlaylistEntity)
 
     @Query("SELECT * FROM playlist ORDER BY id ASC")
     fun getAllData(): PagingSource<Int, PlaylistEntity>

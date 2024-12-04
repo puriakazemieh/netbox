@@ -11,7 +11,7 @@ data class VideosItemDto(
 	val thumbnail: String? = null,
 
 	@field:SerializedName("file")
-	val file: Any? = null,
+	val file: String? = null,
 
 	@field:SerializedName("content_type")
 	val contentType: Int? = null,
@@ -35,7 +35,7 @@ data class VideosItemDto(
 	val publishDate: String? = null,
 
 	@field:SerializedName("file_size")
-	val fileSize: Any? = null,
+	val fileSize: String? = null,
 
 	@field:SerializedName("quality")
 	val quality: Int? = null

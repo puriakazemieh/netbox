@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 data class PlaylistDto(
 
 	@field:SerializedName("thumbnail")
-	val thumbnail: Any? = null,
+	val thumbnail: String? = null,
 
 	@field:SerializedName("name")
 	val name: String? = null,
@@ -17,7 +17,7 @@ data class PlaylistDto(
 	val videosCount: Int? = null,
 
 	@field:SerializedName("videos")
-	val videos: List<VideosItemDto?>? = null,
+	val videos: List<VideosItemDto>? = null,
 
 	@field:SerializedName("id")
 	val id: Int? = null
