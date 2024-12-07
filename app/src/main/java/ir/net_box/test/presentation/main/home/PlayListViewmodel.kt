@@ -6,6 +6,7 @@ import androidx.paging.PagingData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ir.net_box.test.domin.model.Playlist
 import ir.net_box.test.domin.usecase.GetPlaylistUseCase
+import ir.net_box.test.domin.usecase.UseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PlayListViewmodel @Inject constructor(
-    private val getPlaylistUseCase: GetPlaylistUseCase
+    private val useCase: UseCase
 ) : ViewModel() {
 
     private val _playlists = MutableStateFlow<PagingData<Playlist>>(PagingData.empty())
@@ -27,7 +28,7 @@ class PlayListViewmodel @Inject constructor(
 
     private fun fetchPlaylists() {
         viewModelScope.launch {
-            getPlaylistUseCase().collectLatest { pagingData ->
+            useCase.getPlaylistUseCase().collectLatest { pagingData ->
                 _playlists.value = pagingData
             }
         }

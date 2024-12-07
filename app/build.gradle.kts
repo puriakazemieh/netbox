@@ -61,8 +61,16 @@ dependencies {
     implementation(libs.androidx.room.paging)
     ksp(libs.androidx.room.compiler)
 
-    implementation (libs.androidx.paging.runtime)
+    //pagination
+    implementation(libs.androidx.paging.runtime)
     implementation(libs.androidx.paging.runtime.ktx)
+
+    //leanback
+    implementation(libs.androidx.leanback)
+
+
+    implementation (libs.androidx.fragment.ktx)
+    implementation (libs.androidx.lifecycle.extensions)
 
 
 }
