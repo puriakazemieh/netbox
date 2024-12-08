@@ -1,11 +1,10 @@
-package ir.net_box.test.presentation.main.home
+package ir.net_box.test.presentation.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import dagger.hilt.android.lifecycle.HiltViewModel
-import ir.net_box.test.domin.model.Playlist
-import ir.net_box.test.domin.usecase.GetPlaylistUseCase
+import ir.net_box.test.domin.model.VideosItem
 import ir.net_box.test.domin.usecase.UseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,8 +18,8 @@ class PlayListViewmodel @Inject constructor(
     private val useCase: UseCase
 ) : ViewModel() {
 
-    private val _playlists = MutableStateFlow<PagingData<Playlist>>(PagingData.empty())
-    val playlists: StateFlow<PagingData<Playlist>> = _playlists.asStateFlow()
+    private val _playlists = MutableStateFlow<PagingData<VideosItem>>(PagingData.empty())
+    val playlists: StateFlow<PagingData<VideosItem>> = _playlists.asStateFlow()
 
     init {
         fetchPlaylists()

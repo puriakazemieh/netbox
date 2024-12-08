@@ -1,25 +1,27 @@
 package ir.net_box.test.data
 
+import android.annotation.SuppressLint
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
-import ir.net_box.test.data.local.db.PlaylistDao
-import ir.net_box.test.data.local.db.entity.PlaylistEntity
-import ir.net_box.test.data.mapper.toPlaylistEntity
+import androidx.room.withTransaction
+import ir.net_box.test.data.local.db.NetboxDatabase
+import ir.net_box.test.data.local.db.entity.VideosItemEntity
+import ir.net_box.test.data.mapper.toVideosItemEntity
 import ir.net_box.test.data.remote.ApiService
 
 
 @OptIn(ExperimentalPagingApi::class)
 class PlaylistRemoteMediator(
     private val apiService: ApiService,
-    private val myDataDao: PlaylistDao
-) : RemoteMediator<Int, PlaylistEntity>() {
+    private val database: NetboxDatabase
+) : RemoteMediator<Int, VideosItemEntity>() {
 
-
+    @SuppressLint("SuspiciousIndentation")
     override suspend fun load(
         loadType: LoadType,
-        state: PagingState<Int, PlaylistEntity>
+        state: PagingState<Int, VideosItemEntity>
     ): MediatorResult {
         val page = when (loadType) {
             LoadType.REFRESH -> 1
@@ -27,17 +29,26 @@ class PlaylistRemoteMediator(
             LoadType.APPEND -> {
                 val lastItem = state.lastItemOrNull()
                 if (lastItem == null) return MediatorResult.Success(endOfPaginationReached = true)
-                state.pages.size + 1
+                lastItem.page + 1
             }
         }
 
         return try {
             val response = apiService.getPlaylist(page, state.config.pageSize)
             if (response.isSuccessful) {
-                response.body()?.let { data ->
-                    myDataDao.insertAll(data.toPlaylistEntity())
+                val videos = response.body()?.videos ?: emptyList()
+
+                database.withTransaction {
+                    if (loadType == LoadType.REFRESH) {
+                        database.videoDao().clearAll()
+                    }
+
+                    database.videoDao().insertAll(
+                        videos.map { it.toVideosItemEntity(page) }
+                    )
                 }
-                MediatorResult.Success(endOfPaginationReached = response.body()?.videos.isNullOrEmpty())
+
+                MediatorResult.Success(endOfPaginationReached = videos.isEmpty())
             } else {
                 MediatorResult.Error(Exception("Failed to load data"))
             }

@@ -34,6 +34,10 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+
+    packagingOptions {
+        resources.excludes.add("META-INF/*")
+    }
 }
 
 dependencies {
@@ -67,10 +71,12 @@ dependencies {
 
     //leanback
     implementation(libs.androidx.leanback)
+    implementation(libs.leanback.paging)
 
 
     implementation (libs.androidx.fragment.ktx)
     implementation (libs.androidx.lifecycle.extensions)
 
+    implementation(libs.glide)
 
 }

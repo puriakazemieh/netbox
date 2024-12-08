@@ -8,8 +8,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import ir.net_box.test.data.local.db.NetboxDatabase
-import ir.net_box.test.data.local.db.PlaylistDao
-import ir.net_box.test.data.local.db.VideoItemConverter
+import ir.net_box.test.data.local.db.dao.PlaylistDao
+import ir.net_box.test.data.local.db.dao.VideoDao
 import javax.inject.Singleton
 
 
@@ -21,14 +21,20 @@ object DataBaseModule {
     @Provides
     fun provideNetboxDatabase(@ApplicationContext app: Context) =
         Room.databaseBuilder(app, NetboxDatabase::class.java, "netbox.db")
-            .addTypeConverter(VideoItemConverter())
             .allowMainThreadQueries()
             .build()
 
 
     @Provides
     @Singleton
-    fun provideCartDao(
+    fun provideMovieDao(
         database: NetboxDatabase
-    ): PlaylistDao = database.movieDao()
+    ): PlaylistDao = database.playlistDao()
+
+
+    @Provides
+    @Singleton
+    fun provideVideoDao(
+        database: NetboxDatabase
+    ): VideoDao = database.videoDao()
 }

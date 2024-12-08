@@ -1,4 +1,4 @@
-package ir.net_box.test.data.local.db
+package ir.net_box.test.data.local.db.dao
 
 import androidx.paging.PagingSource
 import androidx.room.Dao
@@ -10,10 +10,10 @@ import ir.net_box.test.data.local.db.entity.PlaylistEntity
 @Dao
 interface PlaylistDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAll(data: PlaylistEntity)
 
-    @Query("SELECT * FROM playlist ORDER BY id ASC")
+    @Query("SELECT * FROM playlist ")
     fun getAllData(): PagingSource<Int, PlaylistEntity>
 
 

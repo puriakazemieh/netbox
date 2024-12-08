@@ -22,7 +22,7 @@ object RepositoryModule {
     ): NetboxRepository {
         return NetboxRepositoryImp(
             apiService = api,
-            playlistDao = db.movieDao()
+            database = db
         )
     }
 

@@ -18,7 +18,7 @@ fun VideosItemEntity.toVideosItemDto() = VideosItemDto(
     quality = quality
 )
 
-fun VideosItemDto.toVideosItemEntity() = VideosItemEntity(
+fun VideosItemDto.toVideosItemEntity(page: Int) = VideosItemEntity(
     duration = duration,
     thumbnail = thumbnail,
     file = file,
@@ -30,5 +30,6 @@ fun VideosItemDto.toVideosItemEntity() = VideosItemEntity(
     fileSrc = fileSrc,
     publishDate = publishDate,
     fileSize = fileSize,
-    quality = quality
+    quality = quality,
+    page = page
 )

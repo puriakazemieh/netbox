@@ -8,7 +8,7 @@ fun PlaylistEntity.toPlaylistDto() = PlaylistDto(
     name = name,
     description = description,
     videosCount = videosCount,
-    videos = videos?.map { it.toVideosItemDto() },
+//    videos = videos?.map { it.toVideosItemDto() },
     id = id
 )
 
@@ -17,6 +17,6 @@ fun PlaylistDto.toPlaylistEntity() = PlaylistEntity(
     name = name,
     description = description,
     videosCount = videosCount,
-    videos = videos?.map { it.toVideosItemEntity() },
+//    videos = videos?.map { it.toVideosItemEntity() },
     id = id
 )
