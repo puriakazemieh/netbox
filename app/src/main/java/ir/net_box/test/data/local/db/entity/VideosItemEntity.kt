@@ -10,6 +10,7 @@ data class VideosItemEntity(
 	val file: String? = null,
 	val contentType: Int? = null,
 	val name: String? = null,
+	val namePlayList : String? = null,
 	val description: String? = null,
 	@PrimaryKey
 	val id: Int? = null,

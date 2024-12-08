@@ -44,7 +44,7 @@ class PlaylistRemoteMediator(
                     }
 
                     database.videoDao().insertAll(
-                        videos.map { it.toVideosItemEntity(page) }
+                        videos.map { it.toVideosItemEntity(page,response.body()?.name) }
                     )
                 }
 

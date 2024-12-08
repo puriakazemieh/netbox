@@ -18,12 +18,13 @@ fun VideosItemEntity.toVideosItemDto() = VideosItemDto(
     quality = quality
 )
 
-fun VideosItemDto.toVideosItemEntity(page: Int) = VideosItemEntity(
+fun VideosItemDto.toVideosItemEntity(page: Int,namePlayList: String?) = VideosItemEntity(
     duration = duration,
     thumbnail = thumbnail,
     file = file,
     contentType = contentType,
     name = name,
+    namePlayList = namePlayList,
     description = description,
     id = id,
     createdDate = createdDate,

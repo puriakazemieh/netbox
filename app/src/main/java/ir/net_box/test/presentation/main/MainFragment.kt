@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.DisplayMetrics
-import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
@@ -49,6 +48,7 @@ class MainFragment : BrowseSupportFragment() {
     private lateinit var mMetrics: DisplayMetrics
     private var mBackgroundTimer: Timer? = null
     private var mBackgroundUri: String? = null
+    private var isFirstFetch = true
 
     val viewModel: PlayListViewmodel by viewModels()
 
@@ -116,6 +116,20 @@ class MainFragment : BrowseSupportFragment() {
                 }
             })
 
+        lifecycleScope.launch {
+            listRowAdapter.loadStateFlow.collectLatest { loadState ->
+                if (loadState.source.prepend.endOfPaginationReached &&
+                    listRowAdapter.snapshot().isNotEmpty() &&
+                    isFirstFetch
+                ) {
+                    isFirstFetch = false
+                    rowsAdapter.clear()
+                    val header =
+                        HeaderItem(0, listRowAdapter.snapshot().items.firstOrNull()?.namePlayList)
+                    rowsAdapter.add(ListRow(header, listRowAdapter))
+                }
+            }
+        }
 
         lifecycleScope.launch {
             viewModel.playlists.collectLatest { pagingData ->
@@ -123,8 +137,6 @@ class MainFragment : BrowseSupportFragment() {
             }
         }
 
-        val header = HeaderItem(0, "title")
-        rowsAdapter.add(ListRow(header, listRowAdapter))
         adapter = rowsAdapter
     }
 
