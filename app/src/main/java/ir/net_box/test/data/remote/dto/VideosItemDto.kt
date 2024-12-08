@@ -38,5 +38,7 @@ data class VideosItemDto(
 	val fileSize: String? = null,
 
 	@field:SerializedName("quality")
-	val quality: Int? = null
+	val quality: Int? = null,
+
+	val namePlayList : String? = null,
 )

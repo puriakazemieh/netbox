@@ -6,6 +6,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.scopes.ViewModelScoped
 import ir.net_box.test.domin.NetboxRepository
+import ir.net_box.test.domin.usecase.GetPlaylist2UseCase
 import ir.net_box.test.domin.usecase.GetPlaylistDetailUseCase
 import ir.net_box.test.domin.usecase.GetPlaylistUseCase
 import ir.net_box.test.domin.usecase.UseCase
@@ -21,6 +22,7 @@ object UseCasesModule {
     ): UseCase {
         return UseCase(
             getPlaylistUseCase = GetPlaylistUseCase(repository),
+            getPlaylist2UseCase = GetPlaylist2UseCase(repository),
             getPlaylistDetailUseCase = GetPlaylistDetailUseCase(repository)
         )
     }

@@ -9,8 +9,9 @@ import retrofit2.http.Query
 
 interface ApiService {
 
-    @GET("api/v1/atv/playlist/1/")
+    @GET("api/v1/atv/playlist/{id}/")
     suspend fun getPlaylist(
+        @Path("id") mediaId: Int,
         @Query("page") page: Int,
         @Query("pageSize") pageSize: Int
     ): Response<PlaylistDto>

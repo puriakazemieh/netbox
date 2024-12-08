@@ -49,6 +49,7 @@ class MainFragment : BrowseSupportFragment() {
     private var mBackgroundTimer: Timer? = null
     private var mBackgroundUri: String? = null
     private var isFirstFetch = true
+    private var isFirstFetchPlayList2 = true
 
     val viewModel: PlayListViewmodel by viewModels()
 
@@ -99,41 +100,78 @@ class MainFragment : BrowseSupportFragment() {
 
         val rowsAdapter = ArrayObjectAdapter(ListRowPresenter())
         val cardPresenter = CardPresenter()
-        val listRowAdapter: PagingDataAdapter<VideosItem> = PagingDataAdapter(cardPresenter,
-            object : DiffUtil.ItemCallback<VideosItem>() {
-                override fun areItemsTheSame(
-                    oldItem: VideosItem,
-                    newItem: VideosItem
-                ): Boolean {
-                    return oldItem.name === newItem.name
-                }
-
-                override fun areContentsTheSame(
-                    oldItem: VideosItem,
-                    newItem: VideosItem
-                ): Boolean {
-                    return oldItem == newItem
-                }
-            })
 
         lifecycleScope.launch {
-            listRowAdapter.loadStateFlow.collectLatest { loadState ->
-                if (loadState.source.prepend.endOfPaginationReached &&
-                    listRowAdapter.snapshot().isNotEmpty() &&
-                    isFirstFetch
-                ) {
-                    isFirstFetch = false
-                    rowsAdapter.clear()
-                    val header =
-                        HeaderItem(0, listRowAdapter.snapshot().items.firstOrNull()?.namePlayList)
-                    rowsAdapter.add(ListRow(header, listRowAdapter))
+            viewModel.playlists.collectLatest { pagingData ->
+                val listRowAdapter: PagingDataAdapter<VideosItem> = PagingDataAdapter(cardPresenter,
+                    object : DiffUtil.ItemCallback<VideosItem>() {
+                        override fun areItemsTheSame(
+                            oldItem: VideosItem,
+                            newItem: VideosItem
+                        ): Boolean {
+                            return oldItem.name === newItem.name
+                        }
+
+                        override fun areContentsTheSame(
+                            oldItem: VideosItem,
+                            newItem: VideosItem
+                        ): Boolean {
+                            return oldItem == newItem
+                        }
+                    })
+                listRowAdapter.submitData(pagingData)
+                listRowAdapter.loadStateFlow.collectLatest { loadState ->
+                    if (loadState.source.prepend.endOfPaginationReached &&
+                        listRowAdapter.snapshot().isNotEmpty() &&
+                        isFirstFetch
+                    ) {
+                        isFirstFetch = false
+//                        rowsAdapter.clear()
+                        val header =
+                            HeaderItem(
+                                0,
+                                listRowAdapter.snapshot().items.firstOrNull()?.namePlayList
+                            )
+                        rowsAdapter.add(ListRow(header, listRowAdapter))
+                    }
                 }
             }
         }
 
         lifecycleScope.launch {
-            viewModel.playlists.collectLatest { pagingData ->
+            viewModel.playlists2.collectLatest { pagingData ->
+                val listRowAdapter: PagingDataAdapter<VideosItem> = PagingDataAdapter(cardPresenter,
+                    object : DiffUtil.ItemCallback<VideosItem>() {
+                        override fun areItemsTheSame(
+                            oldItem: VideosItem,
+                            newItem: VideosItem
+                        ): Boolean {
+                            return oldItem.name === newItem.name
+                        }
+
+                        override fun areContentsTheSame(
+                            oldItem: VideosItem,
+                            newItem: VideosItem
+                        ): Boolean {
+                            return oldItem == newItem
+                        }
+                    })
                 listRowAdapter.submitData(pagingData)
+                listRowAdapter.loadStateFlow.collectLatest { loadState ->
+                    if (loadState.source.prepend.endOfPaginationReached &&
+                        listRowAdapter.snapshot().isNotEmpty() &&
+                        isFirstFetchPlayList2
+                    ) {
+                        isFirstFetchPlayList2 = false
+//                        rowsAdapter.clear()
+                        val header =
+                            HeaderItem(
+                                1,
+                                listRowAdapter.snapshot().items.firstOrNull()?.namePlayList
+                            )
+                        rowsAdapter.add(ListRow(header, listRowAdapter))
+                    }
+                }
             }
         }
 

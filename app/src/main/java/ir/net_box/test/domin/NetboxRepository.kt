@@ -7,5 +7,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface NetboxRepository {
     suspend fun getPlaylist(pageSize: Int): Flow<PagingData<VideosItem>>
+    suspend fun getPlaylist2(pageSize: Int): Flow<PagingData<VideosItem>>
     suspend fun getPlayListDetail(id: Int): Flow<PlayDetail>
 }

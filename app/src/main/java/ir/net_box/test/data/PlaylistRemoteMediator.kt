@@ -34,7 +34,7 @@ class PlaylistRemoteMediator(
         }
 
         return try {
-            val response = apiService.getPlaylist(page, state.config.pageSize)
+            val response = apiService.getPlaylist(1, page, state.config.pageSize)
             if (response.isSuccessful) {
                 val videos = response.body()?.videos ?: emptyList()
 
@@ -44,7 +44,7 @@ class PlaylistRemoteMediator(
                     }
 
                     database.videoDao().insertAll(
-                        videos.map { it.toVideosItemEntity(page,response.body()?.name) }
+                        videos.map { it.toVideosItemEntity(page, response.body()?.name) }
                     )
                 }
 

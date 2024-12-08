@@ -37,6 +37,20 @@ class NetboxRepositoryImp @Inject constructor(
         }
     }
 
+    @OptIn(ExperimentalPagingApi::class)
+    override suspend fun getPlaylist2(pageSize: Int): Flow<PagingData<VideosItem>> {
+        return Pager(
+            config = PagingConfig(pageSize = pageSize, enablePlaceholders = false),
+            pagingSourceFactory = {
+                PlaylistRemoteDataSource(apiService = apiService)
+            }
+        ).flow.map { pagingData ->
+            pagingData.map { entity ->
+                entity.toVideosItem()
+            }
+        }
+    }
+
     override suspend fun getPlayListDetail(id: Int): Flow<PlayDetail> {
         return flow<PlayDetail> {
             emit(apiService.getPlayListDetail(id).toPlayDetail())

@@ -18,6 +18,7 @@ fun VideosItemDto.toVideosItem() = VideosItem(
     duration = duration,
     thumbnail = thumbnail,
     name = name,
+    namePlayList = namePlayList,
     description = description,
     id = id,
     publishDate = publishDate,

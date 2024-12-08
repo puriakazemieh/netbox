@@ -2,5 +2,6 @@ package ir.net_box.test.domin.usecase
 
 data class UseCase (
     val getPlaylistUseCase: GetPlaylistUseCase,
-    val getPlaylistDetailUseCase: GetPlaylistDetailUseCase
+    val getPlaylist2UseCase: GetPlaylist2UseCase,
+    val getPlaylistDetailUseCase: GetPlaylistDetailUseCase,
 )
