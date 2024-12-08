@@ -1,15 +1,22 @@
 package ir.net_box.test.presentation.main
 
-import java.util.Timer
-
+import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.DisplayMetrics
+import android.util.Log
+import android.widget.Toast
+import androidx.core.app.ActivityOptionsCompat
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
 import androidx.leanback.app.BackgroundManager
 import androidx.leanback.app.BrowseSupportFragment
+import androidx.leanback.paging.PagingDataAdapter
 import androidx.leanback.widget.ArrayObjectAdapter
 import androidx.leanback.widget.HeaderItem
+import androidx.leanback.widget.ImageCardView
 import androidx.leanback.widget.ListRow
 import androidx.leanback.widget.ListRowPresenter
 import androidx.leanback.widget.OnItemViewClickedListener
@@ -17,23 +24,19 @@ import androidx.leanback.widget.OnItemViewSelectedListener
 import androidx.leanback.widget.Presenter
 import androidx.leanback.widget.Row
 import androidx.leanback.widget.RowPresenter
-import androidx.core.content.ContextCompat
-import android.util.DisplayMetrics
-import android.util.Log
-import android.widget.Toast
-import androidx.fragment.app.viewModels
-import androidx.leanback.paging.PagingDataAdapter
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DiffUtil
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.TimerTask
 import ir.net_box.test.R
 import ir.net_box.test.domin.model.VideosItem
+import ir.net_box.test.presentation.detail.DetailsActivity
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.util.Timer
+import java.util.TimerTask
 import kotlin.getValue
 
 
@@ -113,36 +116,10 @@ class MainFragment : BrowseSupportFragment() {
                 }
             })
 
-//        lifecycleScope.launch {
-//            listRowAdapter.loadStateFlow.collectLatest { loadState ->
-//                // Convert PagingDataAdapter items into ArrayObjectAdapter items
-////                Log.d("949494", "init: loadState append ${loadState.source.append.endOfPaginationReached}")
-////                Log.d("949494", "init: loadState refresh ${loadState.source.refresh.endOfPaginationReached}")
-//                Log.d("949494", "init: loadState prepend ${loadState.source.prepend.endOfPaginationReached}")
-//                Log.d("949494", "bindData: listRowAdapter.snapshot().size ${listRowAdapter.snapshot().size}")
-//
-//                if (loadState.source.prepend.endOfPaginationReached &&  rowsAdapter.size()!=0){
-////                    rowsAdapter.clear()
-////                    listRowAdapter.refresh()
-//                }
-////                Log.d("949494", "init: loadState isIdle ${loadState.source.isIdle}")
-////                listRowAdapter.clear()
-//
-////                    .forEach {
-//
-////                }
-////                playlistPagingAdapter.snapshot().items.forEach {
-////                }
-//            }
-//        }
 
         lifecycleScope.launch {
             viewModel.playlists.collectLatest { pagingData ->
-//                Log.d("949494", "init: pagingData $pagingData")
-//                rowsAdapter.clear()
-//                listRowAdapter.refresh()
                 listRowAdapter.submitData(pagingData)
-
             }
         }
 
@@ -169,12 +146,15 @@ class MainFragment : BrowseSupportFragment() {
             row: Row
         ) {
             if (item is VideosItem) {
-                Log.d("949494", "Item: $item")
-//                val intent = Intent(context!!, DetailsActivity::class.java)
-//                Intent.putExtra(DetailsActivity.Companion.MOVIE, item)
-//
-//                val bundle = ActivityOptionsCompat.toBundle()
-//                startActivity(intent, bundle)
+                val intent = Intent(context!!, DetailsActivity::class.java)
+                intent.putExtra(DetailsActivity.MOVIE, item.id)
+
+                val bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                    requireActivity(),
+                    (itemViewHolder.view as ImageCardView).mainImageView,
+                    DetailsActivity.SHARED_ELEMENT_NAME
+                ).toBundle()
+                startActivity(intent, bundle)
             }
         }
     }
